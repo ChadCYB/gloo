@@ -8,8 +8,8 @@
 
 #pragma once
 
-#include <gloo/transport/tcp/address.h>
 #include <string>
+#include "gloo/transport/tcp/address.h"
 
 namespace gloo {
 namespace transport {
@@ -17,47 +17,34 @@ namespace tcp {
 
 class Error {
  public:
-  // Constant instance that indicates success.
-  static const Error kSuccess;
-
-  /* implicit */ Error() : valid_(false) {}
-
+  Error() : valid_(false), msg_("no error") {}
+  explicit Error(bool valid) : valid_(valid), msg_("") {}
+  explicit Error(const std::string& msg) : valid_(true), msg_(msg) {}
   virtual ~Error() = default;
 
-  // Don't allow Error to be copied or moved to avoid losing the error message.
   Error(const Error&) = delete;
   Error& operator=(const Error&) = delete;
 
-  // Converting to boolean means checking if there is an error. This
-  // means we don't need to use an `std::optional` and allows for a
-  // snippet like the following:
-  //
-  //   if (error) {
-  //     // Deal with it.
-  //   }
-  //
   operator bool() const {
     return valid_;
   }
 
-  // Returns an explanatory string.
-  // Like `std::exception` but returns a `std::string`.
   virtual std::string what() const;
 
- protected:
-  explicit Error(bool valid) : valid_(valid) {}
+  static const Error kSuccess;
 
- private:
-  const bool valid_;
+ protected:
+  bool valid_;
+  std::string msg_;
 };
 
 class SystemError : public Error {
  public:
-  explicit SystemError(const char* syscall, int error, Address remote)
+  SystemError(const char* syscall, int error, const Address& remote = Address())
       : Error(true),
         syscall_(syscall),
         error_(error),
-        remote_(std::move(remote)) {}
+        remote_(remote) {}
 
   std::string what() const override;
 
@@ -69,11 +56,11 @@ class SystemError : public Error {
 
 class ShortReadError : public Error {
  public:
-  ShortReadError(ssize_t expected, ssize_t actual, Address remote)
+  ShortReadError(ssize_t expected, ssize_t actual, const Address& remote = Address())
       : Error(true),
         expected_(expected),
         actual_(actual),
-        remote_(std::move(remote)) {}
+        remote_(remote) {}
 
   std::string what() const override;
 
@@ -85,11 +72,11 @@ class ShortReadError : public Error {
 
 class ShortWriteError : public Error {
  public:
-  ShortWriteError(ssize_t expected, ssize_t actual, Address remote)
+  ShortWriteError(ssize_t expected, ssize_t actual, const Address& remote = Address())
       : Error(true),
         expected_(expected),
         actual_(actual),
-        remote_(std::move(remote)) {}
+        remote_(remote) {}
 
   std::string what() const override;
 
@@ -101,22 +88,12 @@ class ShortWriteError : public Error {
 
 class TimeoutError : public Error {
  public:
-  explicit TimeoutError(std::string msg) : Error(true), msg_(std::move(msg)) {}
-
-  std::string what() const override;
-
- private:
-  const std::string msg_;
+  explicit TimeoutError(const std::string& msg) : Error(msg) {}
 };
 
 class LoopError : public Error {
  public:
-  explicit LoopError(std::string msg) : Error(true), msg_(std::move(msg)) {}
-
-  std::string what() const override;
-
- private:
-  const std::string msg_;
+  explicit LoopError(const std::string& msg) : Error(msg) {}
 };
 
 } // namespace tcp

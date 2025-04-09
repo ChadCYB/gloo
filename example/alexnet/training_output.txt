@@ -1,0 +1,70 @@
+-- Build type not set -- defaulting to Release
+-- Gloo build as STATIC library
+-- Configuring done (0.1s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/user/Desktop/gloo/example/alexnet/build
+[ 95%] Built target gloo
+[100%] Built target alexnet_trainer
+Total parameters: 151882
+[Gloo] Rank 0 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 1 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 2 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+[Gloo] Rank 3 is connected to 3 peer ranks. Expected number of connected peer ranks is : 3
+Using GPU 0 for rank 0
+Total parameters: 151882
+Opening metrics file...
+Metrics file opened successfully
+Measuring bandwidth between nodes...
+Bandwidth between GPU 0 and GPU 1: 292.763 GB/s
+Bandwidth between GPU 0 and GPU 2: 291.867 GB/s
+Bandwidth between GPU 0 and GPU 3: 292.314 GB/s
+Bandwidth between GPU 1 and GPU 2: 292.090 GB/s
+Bandwidth between GPU 1 and GPU 3: 292.265 GB/s
+Bandwidth between GPU 2 and GPU 3: 292.538 GB/s
+Starting training with 2 epochs...
+Epoch 1/2, Step 1/20, Time: 30ms
+Epoch 1/2, Step 2/20, Time: 30ms
+Epoch 1/2, Step 3/20, Time: 32ms
+Epoch 1/2, Step 4/20, Time: 30ms
+Epoch 1/2, Step 5/20, Time: 30ms
+Epoch 1/2, Step 6/20, Time: 29ms
+Epoch 1/2, Step 7/20, Time: 29ms
+Epoch 1/2, Step 8/20, Time: 29ms
+Epoch 1/2, Step 9/20, Time: 32ms
+Epoch 1/2, Step 10/20, Time: 30ms
+Epoch 1/2, Step 11/20, Time: 31ms
+Epoch 1/2, Step 12/20, Time: 29ms
+Epoch 1/2, Step 13/20, Time: 29ms
+Epoch 1/2, Step 14/20, Time: 30ms
+Epoch 1/2, Step 15/20, Time: 29ms
+Epoch 1/2, Step 16/20, Time: 29ms
+Epoch 1/2, Step 17/20, Time: 30ms
+Epoch 1/2, Step 18/20, Time: 31ms
+Epoch 1/2, Step 19/20, Time: 29ms
+Epoch 1/2, Step 20/20, Time: 30ms
+Epoch 1 completed in 0s
+Epoch 2/2, Step 1/20, Time: 29ms
+Epoch 2/2, Step 2/20, Time: 30ms
+Epoch 2/2, Step 3/20, Time: 29ms
+Epoch 2/2, Step 4/20, Time: 31ms
+Epoch 2/2, Step 5/20, Time: 32ms
+Epoch 2/2, Step 6/20, Time: 29ms
+Epoch 2/2, Step 7/20, Time: 30ms
+Epoch 2/2, Step 8/20, Time: 30ms
+Epoch 2/2, Step 9/20, Time: 29ms
+Epoch 2/2, Step 10/20, Time: 29ms
+Epoch 2/2, Step 11/20, Time: 29ms
+Epoch 2/2, Step 12/20, Time: 29ms
+Epoch 2/2, Step 13/20, Time: 29ms
+Epoch 2/2, Step 14/20, Time: 30ms
+Epoch 2/2, Step 15/20, Time: 29ms
+Epoch 2/2, Step 16/20, Time: 29ms
+Epoch 2/2, Step 17/20, Time: 31ms
+Epoch 2/2, Step 18/20, Time: 31ms
+Epoch 2/2, Step 19/20, Time: 30ms
+Epoch 2/2, Step 20/20, Time: 30ms
+Epoch 2 completed in 0s
+
+Total Training Time: 1s
+Training complete
+Cleaning up...

@@ -8,51 +8,49 @@
 
 #include "gloo/rendezvous/hash_store.h"
 
-#include "gloo/common/error.h"
-#include "gloo/common/logging.h"
+#include <chrono>
+#include <stdexcept>
 
 namespace gloo {
 namespace rendezvous {
 
 void HashStore::set(const std::string& key, const std::vector<char>& data) {
-  std::unique_lock<std::mutex> lock(m_);
-  GLOO_ENFORCE(map_.find(key) == map_.end(), "Key '", key, "' already set");
+  std::lock_guard<std::mutex> lock(mutex_);
   map_[key] = data;
   cv_.notify_all();
 }
 
 std::vector<char> HashStore::get(const std::string& key) {
-  std::unique_lock<std::mutex> lock(m_);
+  std::lock_guard<std::mutex> lock(mutex_);
   auto it = map_.find(key);
   if (it == map_.end()) {
-    return std::vector<char>();
+    throw std::runtime_error("Key not found: " + key);
   }
-
   return it->second;
 }
 
 void HashStore::wait(
     const std::vector<std::string>& keys,
     const std::chrono::milliseconds& timeout) {
-  const auto end = std::chrono::steady_clock::now() + timeout;
-  auto pred = [&]() {
-    auto done = true;
+  auto deadline = std::chrono::steady_clock::now() + timeout;
+  std::unique_lock<std::mutex> lock(mutex_);
+  while (true) {
+    bool allFound = true;
     for (const auto& key : keys) {
       if (map_.find(key) == map_.end()) {
-        done = false;
+        allFound = false;
         break;
       }
     }
-    return done;
-  };
-
-  std::unique_lock<std::mutex> lock(m_);
-  if (timeout == kNoTimeout) {
-    cv_.wait(lock, pred);
-  } else {
-    if (!cv_.wait_until(lock, end, pred)) {
-      GLOO_THROW_IO_EXCEPTION(GLOO_ERROR_MSG(
-          "Wait timeout for key(s): ", ::gloo::MakeString(keys)));
+    if (allFound) {
+      return;
+    }
+    if (timeout != kNoTimeout) {
+      if (cv_.wait_until(lock, deadline) == std::cv_status::timeout) {
+        throw std::runtime_error("Wait timeout");
+      }
+    } else {
+      cv_.wait(lock);
     }
   }
 }

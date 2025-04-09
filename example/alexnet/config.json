@@ -1,0 +1,25 @@
+{
+    "model": {
+        "name": "alexnet",
+        "num_classes": 1000,
+        "input_size": 224
+    },
+    "training": {
+        "batch_size": 32,
+        "num_epochs": 5,
+        "steps_per_epoch": 100,
+        "learning_rate": 0.01,
+        "run_first_batch": false
+    },
+    "distributed": {
+        "use_localhost": true,
+        "host": "127.0.0.1",
+        "port": 12345,
+        "bandwidth_limit": 100.0,
+        "topology_config_file": "topology_config.json"
+    },
+    "logging": {
+        "level": "info",
+        "output_dir": "results"
+    }
+} 

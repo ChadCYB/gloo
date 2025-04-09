@@ -1,0 +1,8 @@
+{
+    "num_nodes": 10,
+    "permutations": [
+        0,
+        1
+    ],
+    "topology_type": "ring"
+}

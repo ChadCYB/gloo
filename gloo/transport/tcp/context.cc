@@ -177,8 +177,6 @@ std::unique_ptr<transport::Pair>& Context::getPair(int rank) {
     return pair;
   }
 
-  std::lock_guard<std::mutex> lock(m_);
-
   if (!connecting_[rank]) {
     connecting_[rank] = true;
 
@@ -189,7 +187,6 @@ std::unique_ptr<transport::Pair>& Context::getPair(int rank) {
 
     auto remoteDeviceAddr = Address(remoteRankInfo.addressBytes).getSockaddr();
     auto remoteAddr = Address(remoteDeviceAddr, this->rank);
-    // Actual connection happens asynchronously.
     pair->connect(remoteAddr.bytes());
   }
   return pair;
